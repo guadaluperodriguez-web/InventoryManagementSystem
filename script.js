@@ -26,9 +26,9 @@ function genId() {
 }
 
 function getStatus(p) {
-  if (p.stock === 0)          return { label: 'Sin Stock',  cls: 'badge-out' };
-  if (p.stock <= p.minStock)  return { label: 'Stock Bajo', cls: 'badge-low' };
-  return                             { label: 'En Stock',   cls: 'badge-ok'  };
+  if (p.stock === 0)         return { label: 'Sin Stock',  cls: 'badge-out' };
+  if (p.stock <= p.minStock) return { label: 'Stock Bajo', cls: 'badge-low' };
+  return                            { label: 'En Stock',   cls: 'badge-ok'  };
 }
 
 // --- Stats ---
@@ -39,18 +39,21 @@ function updateStats() {
   document.getElementById('statOut').textContent   = products.filter(p => p.stock === 0).length;
 }
 
-// --- Table ---
-function renderTable() {
+// --- Filter ---
+function getFiltered() {
   const search   = document.getElementById('searchInput').value.toLowerCase();
   const category = document.getElementById('filterCategory').value;
-
-  const filtered = products.filter(p => {
+  return products.filter(p => {
     const matchName = p.name.toLowerCase().includes(search);
     const matchCat  = !category || p.category === category;
     return matchName && matchCat;
   });
+}
 
+// --- Desktop Table ---
+function renderDesktopTable(filtered) {
   const tbody = document.getElementById('productTable');
+  if (!tbody) return;
 
   if (filtered.length === 0) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No se encontraron productos.</td></tr>';
@@ -74,6 +77,45 @@ function renderTable() {
       </tr>
     `;
   }).join('');
+}
+
+// --- Mobile Cards ---
+function renderMobileCards(filtered) {
+  const list = document.getElementById('productCardList');
+  if (!list) return;
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="empty-cards">No se encontraron productos.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(p => {
+    const st = getStatus(p);
+    return `
+      <div class="prod-card">
+        <div class="prod-card-top">
+          <span class="prod-card-name">${p.name}</span>
+          <span class="badge ${st.cls}">${st.label}</span>
+        </div>
+        <div class="prod-card-meta">
+          <span>${p.category}</span>
+          <span><strong>$${Number(p.price).toFixed(2)}</strong></span>
+          <span>Stock: <strong>${p.stock}</strong> &nbsp;·&nbsp; Mín: ${p.minStock}</span>
+        </div>
+        <div class="prod-card-actions">
+          <button class="btn-edit" onclick="openEdit(${p.id})">Editar</button>
+          <button class="btn-del"  onclick="deleteProduct(${p.id})">Eliminar</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// --- Render all ---
+function renderTable() {
+  const filtered = getFiltered();
+  renderDesktopTable(filtered);
+  renderMobileCards(filtered);
 }
 
 function render() {

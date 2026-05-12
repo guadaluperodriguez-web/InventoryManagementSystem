@@ -1,3 +1,6 @@
+Index · HTML
+Copiar
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +10,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
+ 
   <header class="topbar">
     <div class="topbar-left">
       <span class="logo">📦 InvSys</span>
@@ -15,9 +18,9 @@
     </div>
     <span class="date" id="liveDate"></span>
   </header>
-
+ 
   <main class="container">
-
+ 
     <!-- STATS -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -37,22 +40,26 @@
         <span class="stat-value" id="statOut">0</span>
       </div>
     </div>
-
+ 
     <!-- TOOLBAR -->
     <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="🔍 Buscar producto..." />
-      <select id="filterCategory">
-        <option value="">Todas las categorías</option>
-        <option>Electrónica</option>
-        <option>Ropa</option>
-        <option>Alimentos</option>
-        <option>Oficina</option>
-      </select>
-      <button class="btn-add" id="openModal">+ Agregar</button>
+      <div class="toolbar-top">
+        <input type="text" id="searchInput" placeholder="🔍 Buscar producto..." />
+      </div>
+      <div class="toolbar-bottom">
+        <select id="filterCategory">
+          <option value="">Todas las categorías</option>
+          <option>Electrónica</option>
+          <option>Ropa</option>
+          <option>Alimentos</option>
+          <option>Oficina</option>
+        </select>
+        <button class="btn-add" id="openModal">+ Agregar</button>
+      </div>
     </div>
-
-    <!-- TABLE -->
-    <div class="table-wrapper">
+ 
+    <!-- TABLE (desktop) -->
+    <div class="table-wrapper desktop-only">
       <table>
         <thead>
           <tr>
@@ -68,22 +75,26 @@
         <tbody id="productTable"></tbody>
       </table>
     </div>
-
+ 
+    <!-- CARDS (mobile) -->
+    <div class="card-list mobile-only" id="productCardList"></div>
+ 
   </main>
-
+ 
   <!-- MODAL -->
   <div class="modal-overlay" id="modal">
     <div class="modal">
+      <div class="modal-handle mobile-only"></div>
       <div class="modal-header">
         <h2 id="modalTitle">Agregar Producto</h2>
         <button id="closeModal">✕</button>
       </div>
       <form id="productForm">
         <input type="hidden" id="editId"/>
-
+ 
         <label>Nombre</label>
         <input type="text" id="fName" placeholder="Ej: Monitor 24'" required/>
-
+ 
         <div class="form-row">
           <div>
             <label>Categoría</label>
@@ -100,7 +111,7 @@
             <input type="number" id="fStock" placeholder="0" min="0" required/>
           </div>
         </div>
-
+ 
         <div class="form-row">
           <div>
             <label>Precio ($)</label>
@@ -111,7 +122,7 @@
             <input type="number" id="fMinStock" value="5" min="0"/>
           </div>
         </div>
-
+ 
         <div class="form-actions">
           <button type="button" id="cancelModal" class="btn-cancel">Cancelar</button>
           <button type="submit" class="btn-save">Guardar</button>
@@ -119,7 +130,7 @@
       </form>
     </div>
   </div>
-
+ 
   <script src="script.js"></script>
 </body>
 </html>
